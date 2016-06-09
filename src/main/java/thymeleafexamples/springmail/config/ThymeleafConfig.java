@@ -54,6 +54,7 @@ public class ThymeleafConfig extends WebMvcConfigurerAdapter {
         templateEngine.setEnableSpringELCompiler(true); // Compiled SpringEL should speed up executions
         templateEngine.addTemplateResolver(emailTemplateResolver());
         templateEngine.addTemplateResolver(webTemplateResolver());
+        templateEngine.addTemplateResolver(textTemplateResolver());
         templateEngine.addTemplateResolver(stringTemplateResolver());
         templateEngine.setMessageResolver(messageResolver());
         return templateEngine;
@@ -90,13 +91,27 @@ public class ThymeleafConfig extends WebMvcConfigurerAdapter {
     }
 
     /**
+     * THYMELEAF: Template Resolver for Text templates.
+     */
+    private ITemplateResolver textTemplateResolver() {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setPrefix("/mail/text/");
+        templateResolver.setTemplateMode(TemplateMode.TEXT /* https://github.com/thymeleaf/thymeleaf/issues/395 */);
+        templateResolver.setCharacterEncoding(ENCODING);
+        templateResolver.setOrder(Integer.valueOf(3));
+        templateResolver.setCheckExistence(true);
+        templateResolver.setCacheable(false);
+        return templateResolver;
+    }
+
+    /**
      * THYMELEAF: Template Resolver for String templates.
      * (template will be a passed String -- for editable templates)
      */
     private ITemplateResolver stringTemplateResolver() {
         StringTemplateResolver templateResolver = new StringTemplateResolver();
         templateResolver.setTemplateMode("HTML5");
-        templateResolver.setOrder(Integer.valueOf(3));
+        templateResolver.setOrder(Integer.valueOf(4));
         templateResolver.setCheckExistence(true);
         templateResolver.setCacheable(false);
         return templateResolver;

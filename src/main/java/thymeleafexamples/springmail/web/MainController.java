@@ -19,14 +19,14 @@
  */
 package thymeleafexamples.springmail.web;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thymeleaf.util.ClassLoaderUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static thymeleafexamples.springmail.config.SpringWebInitializer.ENCODING;
@@ -69,7 +69,13 @@ public class MainController {
         model.addAttribute("baseTemplate", baseTemplate);
         return "editable.html";
     }
-    
+
+    /* Text email. */
+    @RequestMapping(value = "/text.html", method = GET)
+    public String text() {
+        return "text.html";
+    }
+
     /* Sending confirmation page. */
     @RequestMapping(value = "/sent.html", method = GET)
     public String sent() {

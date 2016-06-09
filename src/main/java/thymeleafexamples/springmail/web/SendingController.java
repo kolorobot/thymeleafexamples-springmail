@@ -19,17 +19,16 @@
  */
 package thymeleafexamples.springmail.web;
 
-import java.io.IOException;
-import java.util.Locale;
-
-import javax.mail.MessagingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import thymeleafexamples.springmail.service.EmailService;
+
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.util.Locale;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -98,5 +97,17 @@ public class SendingController {
         return "redirect:sent.html";
         
     }
-    
+
+    /* Send Text mail */
+    @RequestMapping(value = "/sendTextMail", method = POST)
+    public String sendTextSimple(
+        @RequestParam("recipientName") final String recipientName,
+        @RequestParam("recipientEmail") final String recipientEmail,
+        final Locale locale)
+        throws MessagingException {
+
+        this.emailService.sendTextMail(recipientName, recipientEmail, locale);
+        return "redirect:sent.html";
+
+    }
 }

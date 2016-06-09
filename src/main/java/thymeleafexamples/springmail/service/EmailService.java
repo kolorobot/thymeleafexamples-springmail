@@ -19,13 +19,6 @@
  */
 package thymeleafexamples.springmail.service;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
@@ -35,6 +28,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 @Service
 public class EmailService {
@@ -200,4 +199,29 @@ public class EmailService {
     }
 
 
+    public void sendTextMail(
+            final String recipientName, final String recipientEmail, final Locale locale)
+            throws MessagingException {
+
+        // Prepare the evaluation context
+        final Context ctx = new Context(locale);
+        ctx.setVariable("name", recipientName);
+        ctx.setVariable("subscriptionDate", new Date());
+        ctx.setVariable("hobbies", Arrays.asList("Cinema", "Sports", "Music"));
+
+        // Create the text body using Thymeleaf
+        final String textContent = this.templateEngine.process("email-text.txt", ctx);
+
+        // Prepare message using a Spring helper
+        final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+        message.setSubject("Example Text email");
+        message.setFrom("thymeleaf@example.com");
+        message.setTo(recipientEmail);
+        message.setText(textContent, false /* isHtml */);
+
+        // Send email
+        this.mailSender.send(mimeMessage);
+
+    }
 }

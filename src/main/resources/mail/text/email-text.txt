@@ -1,4 +1,4 @@
-[# th:text="#{greeting(${name})}" /]
+[(#{greeting(${name})})]
 
 [# th:if="${name.length() gt 10}" ]
 Wow! You've got a long name (more than 10 chars)!
@@ -9,7 +9,8 @@ You have been successfully subscribed to the -Fake newsletter- on [# th:text="${
 Your hobbies are:
 
 [# th:each="hobby : ${hobbies}" ]
-    - [# th:utext="${hobby}" /]
+    /*[- */ This code will be removed at thymeleaf parsing time! /* -]*/
+    - [(${hobby})]
 [/]
 
 Regards,
